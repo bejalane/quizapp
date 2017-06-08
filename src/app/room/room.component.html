@@ -1,0 +1,53 @@
+<div class="container-fluid room-dashboard" [hidden]="quizActive">
+	<div class="container">
+		<h1>Room {{id}} </h1>
+		<div>
+			<span>Tap to copy and share the room address with other players to join:</span>
+			<input (click)="copyRoomAddress()" class="form-control room-address" type="text" value="{{roomLink}}" readonly="true">
+		</div>
+		
+		<hr>
+
+		<div class="start-btn-wrapper">
+			<button class="btn btn-success" (click)="startQuiz()">Start Quiz!</button>
+			<hr>
+		</div>
+		
+		<div class="row">
+			<div class="col-xs-6">
+				<div class="room-players">Players:</div>
+				<ol class="room-players-list">
+					<li *ngFor="let player of players; trackBy: index">{{player.name}}</li>
+				</ol>
+			</div>
+			<div class="col-xs-6">
+				<div *ngFor="let msg of roomChangesMessages; trackBy: index">{{msg}}</div>
+			</div>
+		</div>
+		
+	</div>
+</div>
+
+<div class="container-fluid room-dashboard" *ngIf="quizActive" [hidden]="!questionMode">
+	<div class="container">
+		<h2>Round {{step}}</h2>
+		<div class="question-text">{{question.question_text}}</div>
+		<ul class="question-variants">
+			<li *ngFor="let answer of question.answers; let i = index; trackBy: index">
+				<span (click)="chooseAnswer(answer.id); highlighted = true" >{{i + 1}}. {{answer.answer_text}}</span>
+			</li>
+		</ul>
+		<div class="loader" [ngStyle]="{'width': loaderTimePercents + '%'}"></div>
+	</div>
+</div>
+
+<div class="container-fluid room-dashboard" *ngIf="quizActive" [hidden]="!resultsMode">
+	<div class="container">
+		<h2>Results. Round {{step}}</h2>
+		<ul>
+			<li *ngFor="let result of results; trackBy index">
+				<span>{{result.user.name}}</span>: <span>{{result.points}}</span>
+			</li>
+		</ul>
+	</div>
+</div>

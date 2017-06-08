@@ -1,1 +1,68 @@
 /* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css?family=Montserrat:400,600');
+
+body {
+	font-family: 'Montserrat', sans-serif!important;
+}
+.loader {
+	width: 100%;
+	height: 3px;
+	background-color: blue;
+}
+.room-dashboard {
+	background: rgba(134,175,73,1);
+	background: -moz-linear-gradient(left, rgba(134,175,73,1) 0%, rgba(68,136,61,1) 100%);
+	background: -webkit-gradient(left top, right top, color-stop(0%, rgba(134,175,73,1)), color-stop(100%, rgba(68,136,61,1)));
+	background: -webkit-linear-gradient(left, rgba(134,175,73,1) 0%, rgba(68,136,61,1) 100%);
+	background: -o-linear-gradient(left, rgba(134,175,73,1) 0%, rgba(68,136,61,1) 100%);
+	background: -ms-linear-gradient(left, rgba(134,175,73,1) 0%, rgba(68,136,61,1) 100%);
+	background: linear-gradient(to right, rgba(134,175,73,1) 0%, rgba(68,136,61,1) 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#86af49', endColorstr='#44883d', GradientType=1 );
+	min-height: 100vh;
+	color: #fff;
+}
+.room-dashboard input.room-address {
+	cursor: pointer;
+	background-color: rgba(255,255,255,0.3);
+    border: none;
+}
+.start-btn-wrapper {
+	text-align: center;
+}
+.start-btn-wrapper button {
+	font-size: 34px;
+	font-weight: 600;
+}
+.room-players {
+	font-size: 18px;
+	font-weight: 600;
+}
+.room-players-list {
+	font-size: 16px;
+	padding: 10px;
+}
+.question-text {
+	font-size: 50px;
+}
+ul.question-variants {
+	margin: 0;
+	padding: 10px;
+}
+ul.question-variants li {
+	font-size: 20px;
+	width: 50%;
+	display: inline-block;
+	text-align: center;
+	margin: 2.5px 0;
+}
+ul.question-variants li span {
+	padding: 20px;
+	background-color: rgba(255,255,255,0.05);
+	width: 95%;
+	transition: all 0.2s;
+	cursor: pointer;
+	display: block;
+}
+ul.question-variants li span:hover {
+	background-color: rgba(255,255,255,0.2);
+}
