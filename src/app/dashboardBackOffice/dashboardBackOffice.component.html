@@ -1,0 +1,47 @@
+<div class="container">
+	<div class="row">
+		<div class="col-md-12">
+			<h1>Hello Admin!</h1>
+			<div class="col-md-6">
+				<h4>List of questions: <button class="btn btn-sm btn-default" (click)="createNewQuestion()">+ Create New</button></h4>
+				<div *ngFor="let question of questions; let i = index;" >
+					<span (click)="selectedQuestion(question, i)">{{question.id}}. {{question.question_text}}</span>
+				</div>
+			</div>
+			<div class="col-md-6" *ngIf="editMode || addNewMode">
+				<h4 [hidden]="addNewMode">Edit question <span [hidden]="!editMode">number {{currentQuestion + 1}}:</span></h4>
+				<h4 [hidden]="editMode">Add new question:</h4>
+				<div class="col-md-12">
+					<input
+						class="form-control" 
+						type="text" 
+						[(ngModel)]="question.question_text"
+						name="current_question_text">
+				</div>
+				<div name="userForm">
+					<div class="col-md-12">
+						<div class="row">
+							<div class="col-md-6">Text</div>
+							<div class="col-md-2">Right</div>
+						</div>
+					</div>
+					<div class="col-md-12" *ngFor="let answer of question.answers; let i = index;">
+						<div class="row">
+							<div class="col-md-6">
+								<input 
+									class="form-control" 
+									type="text" 
+									[(ngModel)]="answer.answer_text"
+									name="answer-{{i}}">
+							</div>
+							<div class="col-md-2"><input type="checkbox" [(ngModel)]="answer.is_right"></div>
+						</div>
+					</div>
+					<div class="col-md-12">
+						<button class="btn btn-success" (click)="saveAnswers()">Save</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
