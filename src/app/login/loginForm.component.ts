@@ -34,7 +34,12 @@ export class LoginFormComponent  {
 				if(this.token.token){
 					Cookie.set('quiz_token', this.token.token);
 					Cookie.set('quiz_user', this.authForm.value.name);
-					this._router.navigate(['/dashboard']);
+					if(Cookie.get('temp_room')){
+						this._router.navigate(['/room/' + Cookie.get('temp_room')]);
+					} else {
+						this._router.navigate(['/dashboard']);
+					}
+					
 				} else {
 					alert('Sorry, the credentials you have entered are not right. Try again.')
 				}

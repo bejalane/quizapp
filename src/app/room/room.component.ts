@@ -37,6 +37,7 @@ export class RoomComponent  {
 	constructor(
 		private _roomService: RoomService,
 		private route: ActivatedRoute,
+		private _router: Router,
 		@Inject(DOCUMENT) private document: any
 	){
 	    let sdata = new RoomDataForSocket(this.id, Cookie.get('quiz_token'));
@@ -84,18 +85,40 @@ export class RoomComponent  {
 
 	joinRoom(roomId:any){
 		this._roomService.joinRoom(roomId)
-			.subscribe(data =>{ 
-				let sdata = new RoomDataForSocket(parseInt(roomId), Cookie.get('quiz_token'));
-				this.socket.emit('joinRoom', sdata);
-			});
+			.subscribe(
+				data =>{ 
+					console.log(data);
+					let sdata = new RoomDataForSocket(parseInt(roomId), Cookie.get('quiz_token'));
+					this.socket.emit('joinRoom', sdata);
+					if(Cookie.get('temp_room')){
+						Cookie.delete('temp_room', '');
+					}
+				},
+				err => {
+					console.log(err);
+					if(err == 'token_not_provided'){
+						Cookie.set('temp_room', roomId);
+						this._router.navigate(['/']);
+					} else {
+						if(Cookie.get('temp_room')){
+							Cookie.delete('temp_room', '');
+						}
+					}
+				}
+			);
 	}
 
 	getAllRoomPlayers(roomId:any){
 		this._roomService.getAllRoomPlayers(roomId)
-			.subscribe(data =>{ 
-				console.log(data.users);
-				this.players = data.users;
-			});
+			.subscribe(
+				data => { 
+					console.log(data.users);
+					this.players = data.users;
+				},
+				err => {
+					console.log(err);
+				}
+			);
 	}
 
 	startQuiz(){
