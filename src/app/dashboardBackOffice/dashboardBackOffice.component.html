@@ -4,8 +4,9 @@
 			<h1>Hello Admin!</h1>
 			<div class="col-md-6">
 				<h4>List of questions: <button class="btn btn-sm btn-default" (click)="createNewQuestion()">+ Create New</button></h4>
+				<input class="form-control" type="text" placeholder="Search">
 				<div *ngFor="let question of questions; let i = index;" >
-					<span (click)="selectedQuestion(question, i)">{{question.id}}. {{question.question_text}}</span>
+					<span class="q-list-question" (click)="selectedQuestion(question, i)">{{question.id}}. {{question.question_text}}</span>
 				</div>
 			</div>
 			<div class="col-md-6" *ngIf="editMode || addNewMode">
@@ -18,27 +19,31 @@
 						[(ngModel)]="question.question_text"
 						name="current_question_text">
 				</div>
+				<div class="col-md-12"><hr></div>
 				<div name="userForm">
 					<div class="col-md-12">
 						<div class="row">
-							<div class="col-md-6">Text</div>
-							<div class="col-md-2">Right</div>
+							<div class="col-md-9">Answer Text</div>
+							<div class="col-md-3">Right</div>
 						</div>
 					</div>
 					<div class="col-md-12" *ngFor="let answer of question.answers; let i = index;">
 						<div class="row">
-							<div class="col-md-6">
+							<div class="col-md-9">
 								<input 
 									class="form-control" 
 									type="text" 
 									[(ngModel)]="answer.answer_text"
 									name="answer-{{i}}">
 							</div>
-							<div class="col-md-2"><input type="checkbox" [(ngModel)]="answer.is_right"></div>
+							<div class="col-md-3"><input type="checkbox" (click)="checkRightAnswer(i)" [(ngModel)]="answer.is_right"></div>
 						</div>
 					</div>
+					<div class="col-md-12"><hr></div>
 					<div class="col-md-12">
+						<div class="validation-error" [hidden]="!validationError">{{validationError}}</div>
 						<button class="btn btn-success" (click)="saveAnswers()">Save</button>
+						<div class="success-save" [hidden]="!successSave">{{successSave}}</div>
 					</div>
 				</div>
 			</div>

@@ -7,51 +7,70 @@ import { Question } from './question.model';
 @Component({
 	moduleId: module.id,
 	selector: 'dashboardBackOffice',
-	templateUrl: 'dashboardBackOffice.component.html'
+	templateUrl: 'dashboardBackOffice.component.html',
+	styleUrls: ['bodashboard.component.css']
 })
 
 export class DashboardBackOfficeComponent  { 
 	questions: any = [];
 	answers: any = [];
 	currentQuestion: number; 
-
 	question: Question;
 	editMode: boolean = false;
 	addNewMode: boolean = false;
+	validationError: string;
+	successSave: string;
 
 	constructor(private _dashboardBackOfficeService: DashboardBackOfficeService){}
 
-	ngOnInit(){
+	getListOfQuestions(){
 		this._dashboardBackOfficeService.getQuestions()
-			.subscribe(data =>{ 
-				this.questions = data.data;
-				console.log(this.questions);
-			});
+			.subscribe(
+				data =>{ 
+					this.questions = data.data;
+				},
+				err => { console.log(err); }
+			);
+	}
+
+	ngOnInit(){
+		this.getListOfQuestions();
 	}
 
 	selectedQuestion(question:any, index:number){
+		this.validationError = "";
 		this._dashboardBackOfficeService.getQuestionById(question.id)
-			.subscribe(data =>{ 
-				this.answers = data.answers;
-				let editQuestion = new Question(question.id, question.question_text, this.answers);
-				this.question = editQuestion;
-
-				this.currentQuestion = index;
-				this.editMode = true;
-				this.addNewMode = false;
-			});
+			.subscribe(
+				data =>{ 
+					this.answers = data.answers;
+					let editQuestion = new Question(question.id, question.question_text, this.answers);
+					this.question = editQuestion;
+					this.currentQuestion = index;
+					this.editMode = true;
+					this.addNewMode = false;
+				},
+				err => { console.log(err); }
+			);
 	}
 
 	saveAnswers(){
-		console.log(this.question);
-		if(this.question.id){
-			this._dashboardBackOfficeService.updateAnswers(this.question, this.question.id)
-				.subscribe(data =>{ 
-					console.log(data);
-				});
-		} else {
-			console.log('save new q');
+		let validate = this.validateQuestion();
+		if(validate){
+			this.validationError = validate;
+			return false;
 		}
+		this.validationError = "";
+		this._dashboardBackOfficeService.updateAnswers(this.question, this.question.id)
+			.subscribe(
+				data =>{ 
+					this.successSave = "Question saved successfully";
+					setTimeout(()=>{
+					    this.successSave = "";
+					}, 1000);
+					this.getListOfQuestions();
+				},
+				err => { console.log(err); }
+			);
 	}
 
 	createNewQuestion(){
@@ -59,7 +78,18 @@ export class DashboardBackOfficeComponent  {
 		this.question = newQuestion;
 		this.editMode = false;
 		this.addNewMode = true;
-		console.log(newQuestion);
+	}
+
+	checkRightAnswer(index){
+		for (var i = 0; i < this.question.answers.length; i++) {
+			if(i !== index){
+				this.question.answers[i].is_right = false;
+			}
+		}
+	}
+
+	validateQuestion(){
+		return this._dashboardBackOfficeService.validateQuestion(this.question);
 	}
 
 	identify(index:any,item:any){

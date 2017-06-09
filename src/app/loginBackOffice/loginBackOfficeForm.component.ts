@@ -29,14 +29,12 @@ export class LoginBackOfficeFormComponent  {
 
 	submitForm() {
 		let credentials = this.authForm.value;
-		console.log(credentials);
 		this._loginBackOfficeService.loginBackOffice(credentials)
 			.subscribe(data =>{ 
 				this.token = data;
 				if(this.token.token){
-					console.log(this.token);
-					Cookie.set('qad_token', this.token.token);
-					this._router.navigate(['/dashboard']);
+					Cookie.set('quiz_token', this.token.token);
+					this._router.navigate(['/bodashboard']);
 				} else {
 					alert('Sorry, the credentials you have entered are not right. Try again.')
 				}
