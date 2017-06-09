@@ -7,6 +7,8 @@ import { Cookie } from 'ng2-cookies/ng2-cookies';
 import * as io from "socket.io-client";
 import { Question } from './question.model';
 import { DOCUMENT } from '@angular/platform-browser';
+import { OrderByPipe } from './orderby';
+
 
 @Component({
 	moduleId: module.id,
@@ -33,6 +35,8 @@ export class RoomComponent  {
 	loaderTimePercents: string;
 	roomLink: string;
 	roomChangesMessages: any[] = [];
+	isAdmin: boolean;
+	checkedAnswer: number;
 
 	constructor(
 		private _roomService: RoomService,
@@ -65,12 +69,14 @@ export class RoomComponent  {
       		this.timer();
       	});
       	this.socket.on('SendIntermediateResults', (data:any) => {
+      		this.checkedAnswer = 100;
       		this.questionMode = false;
       		this.resultsMode = true;
       		console.log(data);
       		this.results = data.results;
       	});
       	this.roomLink = this.document.location.href;
+
 	}
 
 	timer(){
@@ -93,6 +99,7 @@ export class RoomComponent  {
 					if(Cookie.get('temp_room')){
 						Cookie.delete('temp_room', '');
 					}
+					this.checkIsAdmin(roomId);
 				},
 				err => {
 					console.log(err);
@@ -104,6 +111,19 @@ export class RoomComponent  {
 							Cookie.delete('temp_room', '');
 						}
 					}
+				}
+			);
+	}
+
+	checkIsAdmin(roomId:any){
+		this._roomService.isAdmin(roomId)
+			.subscribe(
+				data => { 
+					let isTrueSet = data.message == 'true';
+					this.isAdmin = isTrueSet;
+				},
+				err => {
+					console.log(err);
 				}
 			);
 	}
@@ -126,11 +146,10 @@ export class RoomComponent  {
 		this.socket.emit('startQuiz', sdata);
 	}
 
-	chooseAnswer(answerId:number){
+	chooseAnswer(answerId:number, index:number){
 		if(!this.answerSend){
-			console.log(answerId);
+			this.checkedAnswer = index;
 			let currentTime = Date.now() - this.stepTime;
-			console.log(currentTime);
 			let sdata = new AnswerData(this.id, Cookie.get('quiz_token'), this.step, this.question.id, answerId, currentTime);
 			this.socket.emit('sendResult', sdata);
 			this.answerSend = true;

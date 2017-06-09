@@ -8,12 +8,14 @@ import { HttpModule, JsonpModule } from '@angular/http';
 
 import { RoomComponent }  from './room.component';
 
+import { OrderByPipe } from './orderby';
+
 const roomRoute: ModuleWithProviders = RouterModule.forChild ([
  { path: 'room/:id', component: RoomComponent}
 ]);
 
 @NgModule({
   imports:      [ BrowserModule, roomRoute, ReactiveFormsModule, HttpModule, FormsModule ],
-  declarations: [ RoomComponent ]
+  declarations: [ RoomComponent, OrderByPipe ]
 })
 export class RoomModule { }

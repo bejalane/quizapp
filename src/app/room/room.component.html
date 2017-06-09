@@ -8,7 +8,7 @@
 		
 		<hr>
 
-		<div class="start-btn-wrapper">
+		<div class="start-btn-wrapper" [hidden]="!isAdmin">
 			<button class="btn btn-success" (click)="startQuiz()">Start Quiz!</button>
 			<hr>
 		</div>
@@ -31,23 +31,25 @@
 <div class="container-fluid room-dashboard" *ngIf="quizActive" [hidden]="!questionMode">
 	<div class="container">
 		<h2>Round {{step}}</h2>
+		<div class="loader" [ngStyle]="{'width': loaderTimePercents + '%'}"></div>
 		<div class="question-text">{{question.question_text}}</div>
 		<ul class="question-variants">
-			<li *ngFor="let answer of question.answers; let i = index; trackBy: index">
-				<span (click)="chooseAnswer(answer.id); highlighted = true" >{{i + 1}}. {{answer.answer_text}}</span>
+			<li *ngFor="let answer of question.answers; let i = index; trackBy: index" [class.highlight]="checkedAnswer === i">
+				<span (click)="chooseAnswer(answer.id, i);" >{{i + 1}}. {{answer.answer_text}}</span>
 			</li>
 		</ul>
-		<div class="loader" [ngStyle]="{'width': loaderTimePercents + '%'}"></div>
+		
 	</div>
 </div>
 
 <div class="container-fluid room-dashboard" *ngIf="quizActive" [hidden]="!resultsMode">
 	<div class="container">
 		<h2>Results. Round {{step}}</h2>
-		<ul>
-			<li *ngFor="let result of results; trackBy index">
-				<span>{{result.user.name}}</span>: <span>{{result.points}}</span>
+		<hr>
+		<ol class="results-list">
+			<li *ngFor="let result of (results | orderBy: '-points'); trackBy index">
+				<span>{{result.user.name}}</span>: <span>{{result.points*1000}}</span>
 			</li>
-		</ul>
+		</ol>
 	</div>
 </div>

@@ -29,4 +29,10 @@ export class RoomService {
 			.catch((error:any) => Observable.throw(error.json().error || 'Server error'))
 	}
 
+	isAdmin(id:number): Observable<any> {
+		return this._http.get(environment.url + 'room/isAdmin/' + id)
+			.map((response:Response) => response.json())
+			.catch((error:any) => Observable.throw(error.json().error || 'Server error'))
+	}
+
 }
