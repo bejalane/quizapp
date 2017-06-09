@@ -17,11 +17,11 @@
 			<div class="col-xs-6">
 				<div class="room-players">Players:</div>
 				<ol class="room-players-list">
-					<li *ngFor="let player of players; trackBy: index">{{player.name}}</li>
+					<li *ngFor="let player of players">{{player.name}}</li>
 				</ol>
 			</div>
 			<div class="col-xs-6">
-				<div *ngFor="let msg of roomChangesMessages; trackBy: index">{{msg}}</div>
+				<div *ngFor="let msg of roomChangesMessages">{{msg}}</div>
 			</div>
 		</div>
 		
@@ -34,7 +34,7 @@
 		<div class="loader" [ngStyle]="{'width': loaderTimePercents + '%'}"></div>
 		<div class="question-text">{{question.question_text}}</div>
 		<ul class="question-variants">
-			<li *ngFor="let answer of question.answers; let i = index; trackBy: index" [class.highlight]="checkedAnswer === i">
+			<li *ngFor="let answer of question.answers; let i = index" [class.highlight]="checkedAnswer === i">
 				<span (click)="chooseAnswer(answer.id, i);" >{{i + 1}}. {{answer.answer_text}}</span>
 			</li>
 		</ul>
@@ -47,7 +47,7 @@
 		<h2>Results. Round {{step}}</h2>
 		<hr>
 		<ol class="results-list">
-			<li *ngFor="let result of (results | orderBy: '-points'); trackBy index">
+			<li *ngFor="let result of (results | orderBy: '-points')">
 				<span>{{result.user.name}}</span>: <span>{{result.points*1000}}</span>
 			</li>
 		</ol>
